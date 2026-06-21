@@ -8,7 +8,6 @@ from yt_dlp import YoutubeDL
 HTML_FILE = "index.html"
 
 def clean_filename(name):
-    # ෆයිල් නමකට ගන්න පුළුවන් විදිහට ඉංග්‍රීසි අකුරු සහ ඉලක්කම් විතරක් ඉතිරි කර ගැනීම
     cleaned = re.sub(r'[^a-zA-Z0-9]', '_', name)
     return cleaned.strip('_')
 
@@ -85,7 +84,7 @@ def inject_and_push_to_cloud(new_song):
     match = re.search(pattern, html_content, re.DOTALL)
 
     if not match:
-        print("❌ HTML එක ඇතුළේ 'const songs = [];' කොටස හඳුනාගත නොහැකි විය!")
+        print("❌ HTML එක ඇतुमළේ 'const songs = [];' කොටස හඳුනාගත නොහැකි විය!")
         return False
 
     existing_songs_str = match.group(2).strip()
@@ -106,7 +105,7 @@ def inject_and_push_to_cloud(new_song):
 
     try:
         subprocess.run(["git", "add", "."], check=True)
-        subprocess.run(["git", "commit", "-m", f"Auto added song & files: {new_song['title']}"], check=True)
+        subprocess.run(["git", "commit", "-m", f"Auto added song & assets: {new_song['title']}"], check=True)
         subprocess.run(["git", "push", "origin", "main"], check=True)
         print("⚡🔥 Boom! GitHub එක හරහා මුළු වෙබ් අඩවියම සහ Download Files සියල්ලම ලයිව් අප්ඩේට් වුණා මචං!")
         return True
@@ -146,16 +145,22 @@ if __name__ == "__main__":
             song_data["lyrics"] = lyrics_input if lyrics_input else "🚫 මෙම ගීතය සඳහා පද (Lyrics) තවමත් ඇතුළත් කර නැත."
             song_data["chords"] = chords_input if chords_input else "🚫 මෙම ගීතය සඳහා Chords තවමත් ඇතුළත් කර නැත."
             
-            # 💾 💡 FIX: බටන් එබුවහම Download වෙන්න ඇත්තම ෆයිල්ස් ටික පරිගණකයේ සාදා ගැනීම
+            # 💾 💡 FIX: ෆෝන් වලින් බැලුවත් කොටු නොවැටී ලස්සනට පේන HTML Download Format එක
             safe_title = clean_filename(song_data["title"])
-            lyrics_filename = f"{safe_title}_lyrics.txt"
-            chords_filename = f"{safe_title}_chords.txt" # PDF එකක් වෙනුවට ලෙහෙසියෙන්ම Download වෙන්න TXT එකක් හැදුවා
+            lyrics_filename = f"{safe_title}_lyrics.html"
+            chords_filename = f"{safe_title}_chords.html"
+            
+            # පද සඳහා වෙනම සරල HTML එකක් සෑදීම
+            html_template_lyrics = f"""<!DOCTYPE html><html lang="si"><head><meta charset="UTF-8"><title>{song_data['title']} - Lyrics</title><style>body{{background:#0b0c10;color:#fff;font-family:sans-serif;padding:30px;line-height:1.8;}}pre{{font-size:18px;color:#00ffcc;white-space:pre-wrap;}}h1{{color:#ff4757;border-bottom:1px solid #232a38;padding-bottom:10px;}}</style></head><body><h1>{song_data['title']} - {song_data['artist']} (Lyrics)</h1><pre>{song_data['lyrics']}</pre></body></html>"""
+            
+            # Chords සඳහා වෙනම සරල HTML එකක් සෑදීම
+            html_template_chords = f"""<!DOCTYPE html><html lang="si"><head><meta charset="UTF-8"><title>{song_data['title']} - Chords</title><style>body{{background:#0b0c10;color:#fff;font-family:sans-serif;padding:30px;line-height:1.8;}}pre{{font-size:18px;color:#00ffcc;white-space:pre-wrap;font-family:monospace;}}h1{{color:#ff4757;border-bottom:1px solid #232a38;padding-bottom:10px;}}</style></head><body><h1>{song_data['title']} - {song_data['artist']} (Chords & Tabs)</h1><pre>{song_data['chords']}</pre></body></html>"""
             
             with open(lyrics_filename, "w", encoding="utf-8") as lf:
-                lf.write(f"--- {song_data['title']} - LYRICS ---\n\n{song_data['lyrics']}")
+                lf.write(html_template_lyrics)
                 
             with open(chords_filename, "w", encoding="utf-8") as cf:
-                cf.write(f"--- {song_data['title']} - CHORDS ---\n\n{song_data['chords']}")
+                cf.write(html_template_chords)
             
             # HTML එකට ලින්ක් එක සම්බන්ධ කිරීම
             song_data["lyricsFile"] = lyrics_filename
@@ -165,4 +170,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"❌ දෝෂයක් සිදු විය: {e}")
     else:
-        print("❌ වැරදි YouTube ලින්ක් එකක්.")
+        print("❌ ඓවැරදි YouTube ලින්ක් එකක්.")

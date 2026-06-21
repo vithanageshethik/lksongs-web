@@ -110,7 +110,7 @@
         }
         
         /* 📱 3D Mobile Touch/Hold Activated */
-        .song-card.mobile-pressed, .action-btn.mobile-pressed, .artist-card.mobile-pressed, .btn-back.mobile-pressed, .btn-submit-form.mobile-pressed {
+        .song-card.mobile-pressed, .action-btn.mobile-pressed, .artist-card.mobile-pressed, .btn-back.mobile-pressed, .btn-submit-form.mobile-pressed, .badge-artist-btn.mobile-pressed {
             top: 4px !important;
             border-color: var(--primary-red) !important;
             box-shadow: 0 2px 0px #b3323d, 0 5px 12px var(--primary-red-glow) !important;
@@ -212,12 +212,20 @@
         .preview-header button { background: none; border: none; color: var(--primary-red); font-size: 20px; cursor: pointer; }
         pre { font-family: 'Courier New', Courier, monospace; font-size: 16px; color: #00ffcc; white-space: pre-wrap; line-height: 1.8; margin: 0; }
 
-        /* YouTube Video Section */
+        /* YouTube Video Section & Dynamic Artist Buttons */
         .yt-preview-section { margin-top: 40px; border-top: 1px solid #232a38; padding-top: 30px; }
         .yt-preview-card { position: relative; width: 100%; max-width: 720px; margin: 0 auto; border-radius: 16px; overflow: hidden; border: 2px solid #232a38; cursor: default; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .yt-preview-card:hover { border-color: var(--primary-red); box-shadow: 0 10px 30px var(--primary-red-glow); }
         .yt-preview-card .thumb-wrapper { padding-top: 56.25%; }
         .yt-badge-large { position: absolute; bottom: 15px; right: 15px; background: #ff0000; color: white; padding: 8px 16px; font-weight: bold; border-radius: 25px; font-size: 14px; }
+        
+        /* 🧱 3D Artist Badges under Video */
+        .artist-badge-container { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 20px; }
+        .badge-artist-btn {
+            background: #11141a; border: 1px solid #232a38; color: #fff; font-weight: bold; font-size: 14px; padding: 10px 20px; border-radius: 25px; cursor: pointer; transition: all 0.1s ease;
+            box-shadow: 0 4px 0px #07090d; display: inline-flex; align-items: center; gap: 8px; position: relative; top: 0;
+        }
+        .badge-artist-btn:hover { border-color: var(--primary-red); box-shadow: 0 4px 0px #b3323d, 0 5px 15px var(--primary-red-glow); top: -2px; }
 
         /* 📄 Legal Documents */
         .info-card { background: #151922; border: 1px solid #232a38; padding: 40px; border-radius: 16px; line-height: 1.8; box-shadow: 0 0 25px rgba(0,0,0,0.5); }
@@ -381,6 +389,8 @@
         </div>
 
         <div class="yt-preview-section animate-fade">
+            <div class="artist-badge-container" id="detailArtistBadges"></div>
+            
             <h2><i class="fab fa-youtube" style="color: #ff0000;"></i> Official YouTube Video Preview</h2>
             <div class="yt-preview-card" id="detailYtCard">
                 <div class="thumb-wrapper" id="ytIframeContainer"></div>
@@ -492,24 +502,6 @@
     <script>
         // 🚀 DATABASE REPOSITORY MATRIX: [DATA ZERO - CLEAN READY FOR AUTOMATION]
         const songs = [
-{
-                            "id": "s_0wlKlUaXjTk",
-                            "title": "Vaahe \"වාහේ\"",
-                            "artist": "Jo Perera x Jeewaka Weerasinghe",
-                            "year": "2026",
-                            "duration": "3:50",
-                            "thumbnail": "https://img.youtube.com/vi/0wlKlUaXjTk/maxresdefault.jpg",
-                            "youtubeUrl": "https://youtu.be/0wlKlUaXjTk",
-                            "audioUrl": "downloaded_song.mp3",
-                            "karaokeSiteUrl": "",
-                            "lyrics": "මී ගස් හෙවනේ අපි දුව පැන ළියදේ\nමතකේ ගෙනයයි ඒ බාලේ\nමදනල අතරේ නුඹෙ සුවඳයි හෙව්වේ\nහිත ගාව හිඳිමී පෙර සේ\n\nනුඹ දැක මනදොළ පිනවෙන යාමේ\nනෝනේ \nඇහුණද හිත කවි කියනවා මාගේ\nඈගේ \nළැම සෙලවෙනකොට ඉවසුම් නෑනේ\nමාමේ\nදෙනවද දුව කරගන්නට වාහේ\n\nරබන් පදේ හඬ රැව්දෙන\nඅලුත් හාලේ මංගල්ලෙට\nඇය එනවා හද ඉපිලී යනවා\nරෑට රෑට හීන ගේන\nහැබැහින් ඈ දුටුව දාට\nඑරබදු මල් හිත ඇතුලේ පිපුණා\n\nමදුරස ආදරේ \nමම පතමී දිවියේ\nවිඳිනෙමි ජීවිතේ\nනුඹ සමගින් නිබඳේ\nහී සර දෙන ඈ නෙත ළඟ\nරන්දා පෙම් රසේ මාගේ",
-                            "chords": "Original Key B\nPlace the capo on 4th fret\n\n[Intro]\n\nG- Em- C- D\n\nG- Em- C- D\nThanam Dena...\n\nG- Em- Am Bm C D\nThanam Dena...\n\n\n[Verse]\n\nG                    Em\nMee gas hewane.. Api duwa pana liyade\nC                 D\nMathake genayai e baale\nG                       Em \nMadanala athare.. Numbe suwadai hewuwe\nC\nHitha gawa hindimi pera se..\n\n\n[Chorus]\n\nG                            Em\nNumba daka manadola pinawena yaame..None\nC                           D\nAhunada hitha kavi kiyanawa mage..Ege\nG                        Em\nLema selawenakota iwasum naane..Maame\nC                         D\nDenawada duwa karagannata vaahe\n\n\nG- Em- C- D\nThanam Dena... //\n\nAm Bm C D\n\n\n[Verse]\n\nG\nRaban pade handa rewdena\nEm\nAluth haale mangalleta\nC              D\nEya enawa hada ipili yanawa\nG\nRaata raata heena gena\nEm\nHabehin eya dutu daata\nC                 D\nErabadu mal hitha athule pipuna\nB7           C\nMadurasa aadare\n     D\nMama pathami diviye\nB7             C\nVindinemi jeewithe\n       D\nNumba samagin nibade\nAm            Bm\nHee sara dena e netha laga\nC          D\nRandaa pem rase mage\n\n\nNumba daka manadola...\n\n\n[Ending - Transpose]\n\nA- F#m- D- E",
-                            "lyricsFile": "Vaahe_lyrics.txt",
-                            "chordsFile": "Vaahe_chords.txt",
-                            "trending": true,
-                            "isAvailableOnSite": true,
-                            "views": 0
-            },
         ];
 
         let artists = [];
@@ -518,7 +510,7 @@
         let localViews = JSON.parse(localStorage.getItem('lksongs_local_views')) || {};
 
         function initMobileGlowAnd3DListeners() {
-            const cards = document.querySelectorAll('.song-card, .artist-card, .action-btn, .btn-back, .btn-submit-form');
+            const cards = document.querySelectorAll('.song-card, .artist-card, .action-btn, .btn-back, .btn-submit-form, .badge-artist-btn');
             cards.forEach(card => {
                 card.addEventListener('touchstart', function() { this.classList.add('mobile-pressed'); }, { passive: true });
                 card.addEventListener('touchend', function() { this.classList.remove('mobile-pressed'); }, { passive: true });
@@ -647,7 +639,7 @@
                 const ytSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
                 pureGrid.innerHTML = `
                     <div class="animate-fade" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: #11141a; border-radius: 12px; border: 1px dashed #232a38;">
-                        <p style="color: #aaa; margin-bottom: 20px; font-size: 15px;">🚫 මෙම සින්දුව දැනට අපගේ... වෙබ් අඩවියේ නැත. සෘජුවම YouTube හරහා නරඹන්න/අසන්න:</p>
+                        <p style="color: #aaa; margin-bottom: 20px; font-size: 15px;">🚫 මෙම සින්දුව දැනට අපගේ වෙබ් අඩවියේ නැත. සෘජුවම YouTube හරහා නරඹන්න/අසන්න:</p>
                         <div class="yt-preview-card" onclick="window.open('${ytSearchUrl}', '_blank')" style="max-width: 480px;">
                             <div class="thumb-wrapper">
                                 <img src="https://images.unsplash.com/photo-1611162617213-7d7a39e9b1d7?q=80&w=1000&auto=format&fit=cover" alt="YouTube">
@@ -732,6 +724,20 @@
             document.getElementById("detailDuration").innerHTML = `<i class="fa fa-clock"></i> ${song.duration}`;
             document.getElementById("detailLyricsDoc").href = song.lyricsFile;
             document.getElementById("detailChordsDoc").href = song.chordsFile;
+
+            // 💡 FIX: YouTube Preview එකට උඩින් Artist/s බටන්ස් Auto-Generate කරන පද්ධතිය
+            const badgeContainer = document.getElementById("detailArtistBadges");
+            badgeContainer.innerHTML = "";
+            const individualArtists = song.artist.split(/ x | X | x|,|\+/);
+            individualArtists.forEach(artName => {
+                const cleanArtName = artName.trim().replace(/['"“”‘’]/g, "");
+                if(cleanArtName !== "") {
+                    badgeContainer.innerHTML += `
+                        <button class="badge-artist-btn animate-fade" onclick="setHashState('artist', '${encodeURIComponent(cleanArtName)}')">
+                            <i class="fa fa-microphone"></i> View ${cleanArtName} Songs
+                        </button>`;
+                }
+            });
 
             let videoId = '';
             if(song.youtubeUrl) {
