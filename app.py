@@ -84,7 +84,7 @@ def inject_and_push_to_cloud(new_song):
     match = re.search(pattern, html_content, re.DOTALL)
 
     if not match:
-        print("❌ HTML එක ඇतुमළේ 'const songs = [];' කොටස හඳුනාගත නොහැකි විය!")
+        print("❌ HTML එක ඇතුළේ 'const songs = [];' කොටස හඳුනාගත නොහැකි විය!")
         return False
 
     existing_songs_str = match.group(2).strip()
@@ -101,13 +101,14 @@ def inject_and_push_to_cloud(new_song):
     with open(HTML_FILE, 'w', encoding='utf-8') as f:
         f.write(new_html_content)
         
-    print("==> 🎵 සින්දුව index.html එකට ඇතුළත් කළා. දැන් Cloud එකට Live Publish කරමින් පවතී...")
+    print("==> 🎵 සින්දුව index.html එකට ඇතුළත් කළා. දැන් GitHub Pages වෙත Live Publish කරමින් පවතී...")
 
     try:
         subprocess.run(["git", "add", "."], check=True)
         subprocess.run(["git", "commit", "-m", f"Auto added song & assets: {new_song['title']}"], check=True)
         subprocess.run(["git", "push", "origin", "main"], check=True)
-        print("⚡🔥 Boom! GitHub එක හරහා මුළු වෙබ් අඩවියම සහ Download Files සියල්ලම ලයිව් අප්ඩේට් වුණා මචං!")
+        print("⚡🔥 Boom! GitHub Pages හරහා මුළු වෙබ් අඩවියම සදාකාලිකවම නොමිලේ ලයිව් අප්ඩේට් වුණා මචං!")
+        print("🌍 Live Link: https://vithanageshethik.github.io/lksongs.lk/")
         return True
     except Exception as e:
         print(f"❌ Cloud එකට Push කිරීමට නොහැකි විය: {e}")
@@ -145,15 +146,11 @@ if __name__ == "__main__":
             song_data["lyrics"] = lyrics_input if lyrics_input else "🚫 මෙම ගීතය සඳහා පද (Lyrics) තවමත් ඇතුළත් කර නැත."
             song_data["chords"] = chords_input if chords_input else "🚫 මෙම ගීතය සඳහා Chords තවමත් ඇතුළත් කර නැත."
             
-            # 💾 💡 FIX: ෆෝන් වලින් බැලුවත් කොටු නොවැටී ලස්සනට පේන HTML Download Format එක
             safe_title = clean_filename(song_data["title"])
             lyrics_filename = f"{safe_title}_lyrics.html"
             chords_filename = f"{safe_title}_chords.html"
             
-            # පද සඳහා වෙනම සරල HTML එකක් සෑදීම
             html_template_lyrics = f"""<!DOCTYPE html><html lang="si"><head><meta charset="UTF-8"><title>{song_data['title']} - Lyrics</title><style>body{{background:#0b0c10;color:#fff;font-family:sans-serif;padding:30px;line-height:1.8;}}pre{{font-size:18px;color:#00ffcc;white-space:pre-wrap;}}h1{{color:#ff4757;border-bottom:1px solid #232a38;padding-bottom:10px;}}</style></head><body><h1>{song_data['title']} - {song_data['artist']} (Lyrics)</h1><pre>{song_data['lyrics']}</pre></body></html>"""
-            
-            # Chords සඳහා වෙනම සරල HTML එකක් සෑදීම
             html_template_chords = f"""<!DOCTYPE html><html lang="si"><head><meta charset="UTF-8"><title>{song_data['title']} - Chords</title><style>body{{background:#0b0c10;color:#fff;font-family:sans-serif;padding:30px;line-height:1.8;}}pre{{font-size:18px;color:#00ffcc;white-space:pre-wrap;font-family:monospace;}}h1{{color:#ff4757;border-bottom:1px solid #232a38;padding-bottom:10px;}}</style></head><body><h1>{song_data['title']} - {song_data['artist']} (Chords & Tabs)</h1><pre>{song_data['chords']}</pre></body></html>"""
             
             with open(lyrics_filename, "w", encoding="utf-8") as lf:
@@ -162,7 +159,6 @@ if __name__ == "__main__":
             with open(chords_filename, "w", encoding="utf-8") as cf:
                 cf.write(html_template_chords)
             
-            # HTML එකට ලින්ක් එක සම්බන්ධ කිරීම
             song_data["lyricsFile"] = lyrics_filename
             song_data["chordsFile"] = chords_filename
             
@@ -170,4 +166,4 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"❌ දෝෂයක් සිදු විය: {e}")
     else:
-        print("❌ ඓවැරදි YouTube ලින්ක් එකක්.")
+        print("❌ වැරදි YouTube ලින්ක් එකක්.")
